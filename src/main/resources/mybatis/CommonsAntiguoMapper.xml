@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.prestaclub.prestaclub_backend.persistence.antiguo.mapper.CommonsAntiguoMapper">
+    
+    <select id="getTipoSolicitudes" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.TipoSolicitudDTO">
+        select 
+            ms.c_tipo_solicitud as id,
+            case  
+                when ms.c_tipo_solicitud=1 then 'Nueva Solicitud'
+                when ms.c_tipo_solicitud=2 then 'Ampliacion'
+                when ms.c_tipo_solicitud=3 then 'Refinanciamiento'
+                when ms.c_tipo_solicitud=4 then 'Renovación'
+                else 'Sin Definir'
+            end as name
+        from mae_solicitud ms
+         group by 1
+    </select> 
+ 
+ 
+
+</mapper>

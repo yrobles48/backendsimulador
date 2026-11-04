@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8"/>
+  <title>Cronograma de Pagos</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 10px 40px; 
+      margin-bottom: 30px !important;
+    }
+    *{
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .container {
+      font-size: 9.5px; 
+      color: #494545;
+    }
+    .border {
+      border: 1px solid black;
+    }
+
+    .bg-primary {
+      background-color: #263575;
+      color: #fff;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .text-end {
+      text-align: right;
+    }
+    .separator{
+        padding: 0px 0px 0px 5px;
+    }
+    .w-100 {
+      width: 100%;  
+      display: block; /* Cambiado de flex a block */
+    }
+    .w-60{
+      width: 59.8%;
+      border: 0px;  
+      display: inline-block;  /* Asegura que los divs se alineen correctamente */
+      padding: 0;/* Espaciado entre columnas */
+      margin: 0;/* Espaciado entre columnas */
+    }
+    .w-50 {  
+      width: 49.5%;
+      border: 0px;  
+      display: inline-block;  /* Asegura que los divs se alineen correctamente */
+      padding: 0;/* Espaciado entre columnas */
+      margin: 0;/* Espaciado entre columnas */
+    } 
+
+    .w-40 {
+      width: 39.8%;
+      border: 0px;  
+      display: inline-block;  /* Asegura que los divs se alineen correctamente */
+      padding: 0;/* Espaciado entre columnas */
+      margin: 0;/* Espaciado entre columnas */
+    }
+    .bg-warning {
+      background-color: #f6a01a;
+    }
+
+    .bg-light {
+      background-color: #bfbfbf;
+    }
+    .my-3 {
+      margin-top:7px;
+      margin-bottom: 7px;
+    }
+    .text-red {
+        color: red;
+    }
+    .d-iblock {
+        display: inline-block;
+    }
+    .tbody-style {
+      background-color: #263575;
+      color: #fff;
+      text-align: center;
+    }
+    .tbody-style td {
+      border: 1px solid blue;
+    }
+  </style>
+</head>
+
+<body >
+  <div class="container">
+    <!-- <div class="">
+      <div class="w-100 text-end">
+        <img src="classpath:/static/images/logo-presta.png" alt="Descripción de la imagen" style="width:150px; height:auto;"/> 
+      </div>
+    </div> -->
+    <div class="" style="padding-top: 20px !important">
+      <div class="w-100 text-center bg-primary">
+        <span><b>ANEXO 2 - CRONOGRAMA DE PAGOS</b></span>
+      </div>
+    </div>
+    <div class="">
+      <div class="separator text-end" th:if="${!liquidacionCostosTransaccion.esDolares}">
+        <span>SOLES</span>
+      </div>
+      <div class="separator text-end" th:if="${liquidacionCostosTransaccion.esDolares}">
+        <span>DOLARES</span>
+      </div>
+    </div> 
+
+    <!-- Datos del Cliente -->
+    <div class="w-100 separator">
+        <div class="w-50">
+          <div class="w-100">
+            <div class="w-50" ><span><b>CLIENTE</b></span></div>
+            <div class="w-50" ><span th:text="${operacion.nombre_corto_cliente}"></span></div>
+          </div>
+          <div class="w-100" >
+            <div class="w-50"><span><b>DOCUMENTO</b></span></div>
+            <div class="w-50"><span th:text="${operacion.numero_documento}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>NRO. DE OPER.</b></span></div>
+            <div class="w-50"><span th:text="${liquidacionCostosTransaccion.numOperacion + ' - ' + (operacion.tipo_operacion_id == 4? 'Nueva R' : operacion.tipo_operacion )}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>NRO. DE OPER. ANTERIOR</b></span></div>
+            <div class="w-50"><span th:text="${operacion.tipo_operacion_id == 1? '' : operacion.codigo_anterior }"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>ASESOR</b></span></div>
+            <div class="w-50"><span th:text="${nombreAsesor}"></span></div>
+          </div> 
+        </div> 
+    </div>
+
+    <br/>
+
+    <div class="w-100 separator">
+      <div class="w-50" >
+        <div class="w-100">
+          <div class="w-50" ><span>Monto neto a recibir</span></div>
+          <div class="w-50" ><span th:text="${liquidacionCostosTransaccion.prestamoNeto}"></span></div>
+        </div>
+        <div class="w-100" >
+          <div class="w-50"><span>Monto total del financiamiento</span></div>
+          <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.financiamientoTotal, 1, 'COMMA', 2, 'POINT')}"></span></div>
+        </div>
+        <div class="w-100">
+          <div class="w-50"><span>Tasa de interes Efectiva Anual</span></div>
+          <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.tea, 1, 'COMMA', 2, 'POINT')} + '%'"></span></div>
+        </div>
+        <div class="w-100">
+          <div class="w-50"><span>Nro de cuotas a pagar</span></div>
+          <div class="w-50"><span th:text="${liquidacionCostosTransaccion.nroCuotas}"></span></div>
+        </div>
+        <div class="w-100">
+          <div class="w-50"><span>Fecha de desembolso</span></div>
+          <div class="w-50"><span th:text="${#temporals.format(liquidacionCostosTransaccion.fechaAdeudado, 'dd-MM-yyyy')}"></span></div>
+        </div>
+      </div>
+      <div class="w-50" >
+        <div class="w-100">
+          <div class="w-50" ><span>Tasa de interes mensual</span></div>
+          <div class="w-50" ><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.tem, 1, 'COMMA', 2, 'POINT') + '%' }"></span></div>
+        </div>
+        <div class="w-100" >
+          <div class="w-50"><span>Tasa de interes moratorio</span></div>
+          <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.tasaInteresMoratoria, 1, 'COMMA', 3, 'POINT') + '%' } "></span></div>
+        </div>
+        <div class="w-100">
+          <div class="w-50"><span>Total de intereses a pagar</span></div>
+          <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.totalInteres, 1, 'COMMA', 2, 'POINT')}"></span></div>
+        </div>
+        <div class="w-100">
+          <div class="w-50"><span>Interes Promedio Anual</span></div>
+          <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.interesPromedioAnual, 1, 'COMMA', 2, 'POINT')}"></span></div>
+        </div>
+        <div class="w-100">
+          <div class="w-50"><span>Como % de la deuda</span></div>
+          <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.porcentajeDeuda, 1, 'COMMA', 2, 'POINT') + '%' }"></span></div>
+        </div>
+      </div>
+    </div>
+    <hr style="margin: 5px 0 5px 0 !important; "/>  
+    <div style="font-size: 9px;">
+      <div class="" style="display: block;">
+        <table class="" style="display: block;" >
+          <thead class= "bg-warning" style="display: block;font-size: 11px;" > 
+            <tr class="text-center" style="display:block;"> 
+              <th style="width: 16%;display: inline-block;" >CUOTA</th>
+              <th style="width: 16%;display: inline-block;" >FECHA DE PAGO</th>
+              <th style="width: 16%;display: inline-block;" >CAPITAL</th>
+              <th style="width: 16%;display: inline-block;" >INTERES</th>
+              <th style="width: 18%;display: inline-block;" >CUOTA A DEPOSITAR</th>
+              <th style="width: 16%;display: inline-block;" >SALDO</th> 
+            </tr>
+          </thead> 
+          <tbody class="" style="display: block;" > 
+            <tr  th:each="item, iterStat : ${listaCronograma}" style="display: block;" class="text-center">  
+              <th style="width: 16%;display: inline-block;" th:text="${item.nroCuota}"></th>
+              <th style="width: 16%;display: inline-block;" th:text="${item.fechaPago}"></th>
+              <th style="width: 16%;display: inline-block;" th:text="${#numbers.formatDecimal(item.capital, 1, 'COMMA', 2, 'POINT')}"></th>
+              <th style="width: 16%;display: inline-block;" th:text="${#numbers.formatDecimal(item.interes, 1, 'COMMA', 2, 'POINT')}"></th>
+              <th style="width: 18%;display: inline-block;" th:text="${#numbers.formatDecimal(item.cuotaDepositar, 1, 'COMMA', 2, 'POINT')}"></th>
+              <th style="width: 16%;display: inline-block;" th:text="${#numbers.formatDecimal(item.saldo, 1, 'COMMA', 2, 'POINT')}"></th> 
+            </tr>
+          </tbody>
+        </table>
+      </div> 
+    </div>
+  </div>  
+</body>
+
+</html>

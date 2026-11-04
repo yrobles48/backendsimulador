@@ -1,0 +1,91 @@
+[
+    { 
+      "nombre": "Johana",
+      "apellidos": "Huaman",
+      "materno": "Rodriguez",
+      "usuario": "JHUAMAN",
+      "correo": "jhuaman@popular-safi.com", 
+      "modulos": [{"nombre": "crm" , "rol" : 1 }, {"nombre": "legal" , "rol" : 1 }, {"nombre": "utilitarios" , "rol" : 1 }, {"nombre": "administracion" , "rol" : 1 } ]
+    },
+    { 
+      "nombre": "Monica",
+      "apellidos": "Seeman",
+      "materno": "Alvarado",
+      "usuario": "MSEEMAN",
+      "correo": "mseeman@popular-safi.com", 
+      "modulos": [{"nombre": "crm" , "rol" : 1 }, {"nombre": "legal" , "rol" : 1 }, {"nombre": "utilitarios" , "rol" : 1 }, {"nombre": "administracion" , "rol" : 1 } ]
+    }, 
+    {
+      "nombre": "Juan Diego",
+      "apellidos": "Cañamero",
+      "materno": "Torres",
+      "usuario": "JCANAMERO",
+      "correo": "jcanamero@prestaclub.com", 
+      "modulos": [{"nombre": "crm" , "rol" : 1 }, {"nombre": "legal" , "rol" : 1 }, {"nombre": "utilitarios" , "rol" : 1 }, {"nombre": "administracion" , "rol" : 1 } ]
+    },
+    {
+      "nombre": "Hellen",
+      "apellidos": "Lengua",
+      "materno": "Sanchez",
+      "usuario": "HLENGUA",
+      "correo": "hlengua@prestaclub.com", 
+      "modulos": [{"nombre": "crm" , "rol" : 2 }, {"nombre": "legal" , "rol" : 2 }, {"nombre": "utilitarios" , "rol" : 2 }, {"nombre": "administracion" , "rol" : 2 } ]
+    },
+    {
+      "nombre": "Fiorella Paola",
+      "apellidos": "Auris",
+      "materno": "Chavez",
+      "usuario": "FAURIS",
+      "correo": "fauris@prestaclub.com", 
+      "modulos": [{"nombre": "utilitarios" , "rol" : 3 } ]
+    },
+    {
+      "nombre": "Gabriela",
+      "apellidos": "Proa",
+      "materno": "Julcarima",
+      "usuario": "GPROA",
+      "correo": "gproa@prestaclub.com", 
+      "modulos": [{"nombre": "utilitarios" , "rol" : 3 } ]
+    },
+    {
+      "nombre": "Josoa Edinho",
+      "apellidos": "Del Aguila",
+      "materno": "Zarate",
+      "usuario": "JAGUILA",
+      "correo": "jaguila@prestaclub.com", 
+      "modulos": [{"nombre": "utilitarios" , "rol" : 3 } ]
+    },
+    {
+      "nombre": "Kasandra",
+      "apellidos": "Cañamero",
+      "materno": "Torres",
+      "usuario": "KCANAMERO",
+      "correo": "kcanamero@prestaclub.com",
+      "modulos": [{"nombre": "utilitarios" , "rol" : 3 } ]
+    }, 
+    {
+      "nombre": "Ricardo",
+      "apellidos": "Carrillo",
+      "materno": "Valqui",
+      "usuario": "RCARRILLO",
+      "correo": "rcarrillo@prestaclub.com", 
+      "modulos": [{"nombre": "utilitarios" , "rol" : 3 } ]
+    },
+    {
+      "nombre": "Leonides Duilio",
+      "apellidos": "Mendiolaza",
+      "materno": "Zuñiga",
+      "usuario": "LMENDIOLAZA",
+      "correo": "lmendiolaza@prestaclub.com", 
+      "modulos": [{"nombre": "utilitarios" , "rol" : 4 } ]
+    },
+    {
+      "nombre": "Pedro",
+      "apellidos": "Huarca",
+      "materno": "Guevara",
+      "usuario": "PHUARCA",
+      "correo": "phuarca@prestaclub.com", 
+      "modulos": [{"nombre": "utilitarios" , "rol" : 3 } ]
+    }
+  ]
+  

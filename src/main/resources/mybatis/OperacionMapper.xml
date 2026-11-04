@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.prestaclub.prestaclub_backend.persistence.antiguo.mapper.OperacionesMapper">
+    
+    <select id="selectOperacionesXNumeroDocumento" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.OperacionDTO">
+        SELECT
+            ms.c_mae_solicitud_id AS id,
+            ms.c_mae_solicitud_id_pk AS numero_operacion,
+            CONCAT(p.nombres, ' ', p.apellidopaterno, ' ', p.apellidomaterno) AS nombre_cliente,
+            CONCAT(p.nombres, ' ', p.apellidopaterno, ' ',UPPER(LEFT(p.apellidomaterno, 1)),'.') AS nombre_corto_cliente,
+            case when p.tipodocumento = '1' then 'DNI'
+                 when p.tipodocumento = '7' then 'PASAPORTE'
+                 when p.tipodocumento = '4' then 'C.E'
+                 ELSE 'DNI' END AS tipo_documento,
+            case  
+                when ms.e_fase=1 then 'Apertura Agendada'
+                when ms.e_fase=2 then 'Revision Legal'
+                when ms.e_fase=3 then 'Cobrar Inspeccion'
+                when ms.e_fase=4 then 'Analisis Financiero'
+                when ms.e_fase=5 then 'Evaluando Coordinar Inspeccion'
+                when ms.e_fase=6 then 'Inspeccion'
+                when ms.e_fase=7 then 'Evaluando Coordinar Negociacion'
+                when ms.e_fase=8 then 'Negociacion'
+                when ms.e_fase=9 then 'Cobrar Costo de Transaccion'
+                when ms.e_fase=10 then 'Proceso de desembolso'
+                when ms.e_fase=11 then 'Hipotecado'
+            end as fase_operacion,
+            ms.e_fase as fase_operacion_id,
+            case  
+                when ms.c_tipo_solicitud=1 then 'Nueva Solicitud'
+                when ms.c_tipo_solicitud=2 then 'Ampliacion'
+                when ms.c_tipo_solicitud=3 then 'Refinanciamiento'
+                when ms.c_tipo_solicitud=4 then 'Renovacion'
+            end as tipo_operacion, 
+            ms.c_tipo_solicitud as tipo_operacion_id,
+            p.numerodocumento AS numero_documento
+        FROM 
+            mae_solicitud ms 
+            INNER JOIN mae_solicitud_persona msp ON ms.c_mae_solicitud_id = msp.c_mae_solicitud_id
+            INNER JOIN persona p ON p.idpersona = msp.c_persona_id  
+        WHERE
+            ms.e_esactivo=true   and
+            msp.e_estado = true 
+            AND p.numerodocumento = #{numeroDocumento} 
+        order by ms.c_mae_solicitud_id_pk desc
+    </select>
+
+    <select id="selectOperacionesXNumeroDocumentoID" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.OperacionIDDTO">
+        SELECT
+        ms.c_mae_solicitud_id AS id,
+        ms.c_mae_solicitud_id_pk AS numero_operacion,
+        CONCAT(p.nombres, ' ', p.apellidopaterno, ' ', p.apellidomaterno) AS nombre_cliente,
+        CONCAT(p.nombres, ' ', p.apellidopaterno, ' ',UPPER(LEFT(p.apellidomaterno, 1)),'.') AS nombre_corto_cliente,
+        case when p.tipodocumento = '1' then 'DNI'
+        when p.tipodocumento = '7' then 'PASAPORTE'
+        when p.tipodocumento = '4' then 'C.E'
+        ELSE 'DNI' END AS tipo_documento,
+        case
+        when ms.e_fase=1 then 'Apertura Agendada'
+        when ms.e_fase=2 then 'Revision Legal'
+        when ms.e_fase=3 then 'Cobrar Inspeccion'
+        when ms.e_fase=4 then 'Analisis Financiero'
+        when ms.e_fase=5 then 'Evaluando Coordinar Inspeccion'
+        when ms.e_fase=6 then 'Inspeccion'
+        when ms.e_fase=7 then 'Evaluando Coordinar Negociacion'
+        when ms.e_fase=8 then 'Negociacion'
+        when ms.e_fase=9 then 'Cobrar Costo de Transaccion'
+        when ms.e_fase=10 then 'Proceso de desembolso'
+        when ms.e_fase=11 then 'Hipotecado'
+        end as fase_operacion,
+        ms.e_fase as fase_operacion_id,
+        case
+        when ms.c_tipo_solicitud=1 then 'Nueva Solicitud'
+        when ms.c_tipo_solicitud=2 then 'Ampliacion'
+        when ms.c_tipo_solicitud=3 then 'Refinanciamiento'
+        when ms.c_tipo_solicitud=4 then 'Renovacion'
+        end as tipo_operacion,
+        ms.c_tipo_solicitud as tipo_operacion_id,
+        p.numerodocumento AS numero_documento,'' email,'' telefono
+        FROM
+        mae_solicitud ms
+        INNER JOIN mae_solicitud_persona msp ON ms.c_mae_solicitud_id = msp.c_mae_solicitud_id
+        INNER JOIN persona p ON p.idpersona = msp.c_persona_id
+        WHERE
+        ms.e_esactivo=true
+        and msp.e_estado = true
+        AND p.numerodocumento = #{numeroDocumento}
+        order by ms.c_mae_solicitud_id_pk desc
+    </select>
+
+
+    <select id="selectOperacionesXNumeroOperacion" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.OperacionDTO">
+        SELECT
+            ms.c_mae_solicitud_id AS id,
+            ms.c_mae_solicitud_id_pk AS numero_operacion,
+            CONCAT(p.nombres, ' ', p.apellidopaterno, ' ', p.apellidomaterno) AS nombre_cliente,
+            CONCAT(p.nombres, ' ', p.apellidopaterno, ' ',UPPER(LEFT(p.apellidomaterno, 1)),'.') AS nombre_corto_cliente,
+            case when p.tipodocumento = '1' then 'DNI'
+                 when p.tipodocumento = '7' then 'PASAPORTE'
+                 when p.tipodocumento = '4' then 'C.E'
+                 ELSE 'DNI' END AS tipo_documento,
+            case  
+                when ms.e_fase=1 then 'Apertura Agendada'
+                when ms.e_fase=2 then 'Revision Legal'
+                when ms.e_fase=3 then 'Cobrar Inspeccion'
+                when ms.e_fase=4 then 'Analisis Financiero'
+                when ms.e_fase=5 then 'Evaluando Coordinar Inspeccion'
+                when ms.e_fase=6 then 'Inspeccion'
+                when ms.e_fase=7 then 'Evaluando Coordinar Negociacion'
+                when ms.e_fase=8 then 'Negociacion'
+                when ms.e_fase=9 then 'Cobrar Costo de Transaccion'
+                when ms.e_fase=10 then 'Proceso de desembolso'
+                when ms.e_fase=11 then 'Hipotecado'
+            end as fase_operacion,
+            ms.e_fase as fase_operacion_id,
+            case  
+                when ms.c_tipo_solicitud=1 then 'Nueva Solicitud'
+                when ms.c_tipo_solicitud=2 then 'Ampliacion'
+                when ms.c_tipo_solicitud=3 then 'Refinanciamiento'
+                when ms.c_tipo_solicitud=4 then 'Renovacion'
+            end as tipo_operacion,
+            ms.c_tipo_solicitud as tipo_operacion_id,
+            p.numerodocumento AS numero_documento
+        FROM 
+            mae_solicitud ms 
+            INNER JOIN mae_solicitud_persona msp ON ms.c_mae_solicitud_id = msp.c_mae_solicitud_id
+            INNER JOIN persona p ON p.idpersona = msp.c_persona_id  
+        WHERE
+            ms.e_esactivo=true
+            and msp.e_estado = true
+            and msp.b_solicitante = true
+            AND ms.c_mae_solicitud_id_pk = #{numeroOperacion} 
+    </select>
+
+    <select id="selectOperacionesXFecha" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.OperacionDTO">
+        SELECT
+            ms.c_mae_solicitud_id AS id,
+            ms.c_mae_solicitud_id_pk AS numero_operacion,
+            CONCAT(p.nombres, ' ', p.apellidopaterno, ' ', p.apellidomaterno) AS nombre_cliente,
+            CONCAT(p.nombres, ' ', p.apellidopaterno, ' ',UPPER(LEFT(p.apellidomaterno, 1)),'.') AS nombre_corto_cliente,
+            case when p.tipodocumento = '1' then 'DNI'
+                 when p.tipodocumento = '7' then 'PASAPORTE'
+                 when p.tipodocumento = '4' then 'C.E'
+                 ELSE 'DNI' END AS tipo_documento,
+            case  
+                when ms.e_fase=1 then 'Apertura Agendada'
+                when ms.e_fase=2 then 'Revision Legal'
+                when ms.e_fase=3 then 'Cobrar Inspeccion'
+                when ms.e_fase=4 then 'Analisis Financiero'
+                when ms.e_fase=5 then 'Evaluando Coordinar Inspeccion'
+                when ms.e_fase=6 then 'Inspeccion'
+                when ms.e_fase=7 then 'Evaluando Coordinar Negociacion'
+                when ms.e_fase=8 then 'Negociacion'
+                when ms.e_fase=9 then 'Cobrar Costo de Transaccion'
+                when ms.e_fase=10 then 'Proceso de desembolso'
+                when ms.e_fase=11 then 'Hipotecado'
+            end as fase_operacion,
+            ms.e_fase as fase_operacion_id,
+            case  
+                when ms.c_tipo_solicitud=1 then 'Nueva Solicitud'
+                when ms.c_tipo_solicitud=2 then 'Ampliacion'
+                when ms.c_tipo_solicitud=3 then 'Refinanciamiento'
+                when ms.c_tipo_solicitud=4 then 'Renovacion'
+            end as tipo_operacion,
+            ms.c_tipo_solicitud as tipo_operacion_id,
+            p.numerodocumento AS numero_documento,
+            ms.f_fecharegistro
+        FROM 
+            mae_solicitud ms 
+            INNER JOIN mae_solicitud_persona msp ON ms.c_mae_solicitud_id = msp.c_mae_solicitud_id
+            INNER JOIN persona p ON p.idpersona = msp.c_persona_id  
+        WHERE
+            ms.e_esactivo=true
+            and msp.e_estado = true
+            and msp.b_solicitante = true
+            and ms.f_fecharegistro::date between #{fechaini}::date and #{fechafin}::date
+    </select>
+
+    <select id="selectOperacionesXNumeroID" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.OperacionIDDTO">
+        SELECT distinct
+        ms.c_mae_solicitud_id AS id,
+        ms.c_mae_solicitud_id_pk AS numero_operacion,
+        CONCAT(p.nombres, ' ', p.apellidopaterno, ' ', p.apellidomaterno) AS nombre_cliente,
+        CONCAT(p.nombres, ' ', p.apellidopaterno, ' ',UPPER(LEFT(p.apellidomaterno, 1)),'.') AS nombre_corto_cliente,
+        case when p.tipodocumento = '1' then 'DNI'
+        when p.tipodocumento = '7' then 'PASAPORTE'
+        when p.tipodocumento = '4' then 'C.E'
+        ELSE 'DNI' END AS tipo_documento,
+        case
+        when ms.e_fase=1 then 'Apertura Agendada'
+        when ms.e_fase=2 then 'Revision Legal'
+        when ms.e_fase=3 then 'Cobrar Inspeccion'
+        when ms.e_fase=4 then 'Analisis Financiero'
+        when ms.e_fase=5 then 'Evaluando Coordinar Inspeccion'
+        when ms.e_fase=6 then 'Inspeccion'
+        when ms.e_fase=7 then 'Evaluando Coordinar Negociacion'
+        when ms.e_fase=8 then 'Negociacion'
+        when ms.e_fase=9 then 'Cobrar Costo de Transaccion'
+        when ms.e_fase=10 then 'Proceso de desembolso'
+        when ms.e_fase=11 then 'Hipotecado'
+        end as fase_operacion,
+        ms.e_fase as fase_operacion_id,
+        case
+        when ms.c_tipo_solicitud=1 then 'Nueva Solicitud'
+        when ms.c_tipo_solicitud=2 then 'Ampliacion'
+        when ms.c_tipo_solicitud=3 then 'Refinanciamiento'
+        when ms.c_tipo_solicitud=4 then 'Renovacion'
+        end as tipo_operacion,
+        ms.c_tipo_solicitud as tipo_operacion_id,
+        p.numerodocumento AS numero_documento,t.numero telefono,e.nombre email
+        FROM
+        mae_solicitud ms
+        INNER JOIN mae_solicitud_persona msp ON ms.c_mae_solicitud_id = msp.c_mae_solicitud_id
+        INNER JOIN persona p ON p.idpersona = msp.c_persona_id
+        INNER JOIN registropersonal  rp on rp.idpersona=p.idpersona
+        left JOIN email e on e.idregistropersonal=rp.idregistropersonal and e.tipo_email='0001' and length(e.nombre)>0
+        left JOIN telefono t on t.idregistropersonal=rp.idregistropersonal and t.tipouso='0001' and substring(t.numero ,1,1)='9'
+        WHERE
+        ms.e_esactivo=true
+        and msp.e_estado = true
+        and msp.b_solicitante = true
+        AND ms.c_mae_solicitud_id_pk= #{numeroOperacion}
+    </select>
+
+    <select id="selectCodigoAnterior" resultType="java.lang.Long"> 
+        SELECT 
+        CASE 
+            WHEN MAX(s.c_mae_solicitud_id_pk) IS NULL THEN NULL
+            ELSE MAX(s.c_mae_solicitud_id_pk) 
+        END AS c_mae_solicitud_id_pk
+    FROM 
+        mae_garantia m, 
+        mae_solicitud_garantia g, 
+        mae_solicitud_persona sp, 
+        persona p, 
+        registropersonal rp, 
+        mae_solicitud s
+    WHERE 
+        g.c_mae_garantia_id = m.c_mae_garantia_id 
+        AND g.c_mae_solicitud_id = sp.c_mae_solicitud_id 
+        AND rp.idpersona = p.idpersona
+        AND s.e_esactivo=true
+        AND s.c_mae_solicitud_id = sp.c_mae_solicitud_id
+        AND g.c_mae_solicitud_id = s.c_mae_solicitud_id 
+        AND sp.e_estado = true 
+        AND s.c_mae_solicitud_id_pk &gt; 0 
+        AND g.e_estado = true 
+        AND p.idpersona = sp.c_persona_id 
+        AND rp.idpersona = sp.c_persona_id 
+        AND g.c_mae_garantia_id IN (
+            SELECT 
+                MAX(g.c_mae_garantia_id) 
+            FROM 
+                mae_garantia m, 
+                mae_solicitud_garantia g, 
+                mae_solicitud_persona sp, 
+                persona p, 
+                registropersonal rp, 
+                mae_solicitud s, 
+                configuracionfase cf
+            WHERE 
+                g.c_mae_garantia_id = m.c_mae_garantia_id 
+                AND g.c_mae_solicitud_id = sp.c_mae_solicitud_id 
+                AND rp.idpersona = p.idpersona
+                AND s.c_mae_solicitud_id = sp.c_mae_solicitud_id 
+                AND g.c_mae_solicitud_id = s.c_mae_solicitud_id 
+                AND sp.e_estado = true 
+                AND cf.c_fase = s.e_fase 
+                AND s.c_mae_solicitud_id_pk &gt; 0 
+                AND g.e_estado = true
+                AND s.e_esactivo=true
+                AND p.idpersona = sp.c_persona_id 
+                AND rp.idpersona = sp.c_persona_id 
+                AND sp.b_solicitante = true 
+                AND s.c_mae_solicitud_id_pk = #{numeroOperacion}
+        ) 
+        AND s.c_mae_solicitud_id_pk &lt; #{numeroOperacion}
+    </select>
+    <select id="getPropietariosXNumeroOperacion" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.PropietariosDTO">
+        select
+        p.idpersona id,
+        concat(p.nombres , ' ',p.apellidopaterno, ' ',p.apellidomaterno) nombres,
+        p.numerodocumento numeroDocumento,
+        sp.b_solicitante esSolicitante
+        from mae_solicitud s
+        inner join mae_solicitud_persona sp on s.c_mae_solicitud_id=sp.c_mae_solicitud_id
+        inner join persona p on p.idpersona=sp.c_persona_id
+        inner join registropersonal rp on rp.idpersona=p.idpersona
+        where
+        sp.e_estado=true
+            and s.e_esactivo=true
+            and s.c_mae_solicitud_id_pk= #{numeroOperacion}
+        order by sp.b_solicitante,
+            sp.b_propietario  
+    </select>
+
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.prestaclub.prestaclub_backend.persistence.antiguo.mapper.HomeDashboardAntiguoMapper">
+    
+    <select id="getDashboardTipoSolicitud" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.DashboardTipoSolicitudDTO">
+        select 
+            ms.c_tipo_solicitud as id,
+            case  
+                when ms.c_tipo_solicitud=1 then 'Nueva Solicitud'
+                when ms.c_tipo_solicitud=2 then 'Ampliacion'
+                when ms.c_tipo_solicitud=3 then 'Refinanciamiento'
+                when ms.c_tipo_solicitud=4 then 'Renovación'
+                else 'Sin Definir'
+            end as name,
+            count(1) as quantity
+        from (
+            SELECT DISTINCT c_mae_solicitud_id, c_tipo_solicitud
+            FROM mae_solicitud
+        ) ms
+         group by 1
+    </select> 
+    <select id="getDashboardListaTipoSolicitudTotal" resultType="Integer">
+        WITH primer_msp AS (
+        SELECT 
+            msp.c_mae_solicitud_id, 
+            msp.c_persona_id, 
+            msp.e_estado,
+            ROW_NUMBER() OVER (PARTITION BY msp.c_mae_solicitud_id ORDER BY msp.c_persona_id) AS rn
+        FROM mae_solicitud_persona msp
+        WHERE msp.e_estado = true
+        )
+        SELECT COUNT(DISTINCT ms.c_mae_solicitud_id) 
+        FROM mae_solicitud ms 
+        LEFT JOIN primer_msp msp_filtered ON ms.c_mae_solicitud_id = msp_filtered.c_mae_solicitud_id AND msp_filtered.rn = 1   
+        LEFT JOIN persona p  ON p.idpersona = msp_filtered.c_persona_id
+        <where>
+        <if test="tipoSolicitud != null">
+            AND ms.c_tipo_solicitud = #{tipoSolicitud}
+        </if>
+        <if test="filterText != null and filterText != ''">
+            AND (
+                CONCAT(p.nombres, ' ', p.apellidopaterno, ' ', p.apellidomaterno) LIKE CONCAT('%', #{filterText}, '%') 
+                OR p.numerodocumento LIKE CONCAT('%', #{filterText}, '%') 
+                OR CAST(ms.c_mae_solicitud_id_pk AS TEXT) LIKE CONCAT('%', #{filterText}, '%')
+            )
+        </if>
+    </where>
+    </select> 
+    <select id="getDashboardListaTipoSolicitud" resultType="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.DashboardListaTipoSolicitudDTO">
+    WITH primer_msp AS (
+    SELECT 
+        msp.c_mae_solicitud_id, 
+        msp.c_persona_id, 
+        msp.e_estado,
+        ROW_NUMBER() OVER (PARTITION BY msp.c_mae_solicitud_id ORDER BY msp.c_persona_id) AS rn
+    FROM mae_solicitud_persona msp
+    WHERE msp.e_estado = true
+    )
+    SELECT distinct 
+    ms.c_mae_solicitud_id_pk AS numero_operacion,
+    CONCAT(p.nombres, ' ', p.apellidopaterno, ' ', p.apellidomaterno) AS nombre_cliente,
+    ms.e_fase AS fase_id,
+    CASE 
+        WHEN ms.e_fase = 1 THEN 'Apertura Agendada'
+        WHEN ms.e_fase = 2 THEN 'Revision Legal'
+        WHEN ms.e_fase = 3 THEN 'Cobrar Inspeccion'
+        WHEN ms.e_fase = 4 THEN 'Analisis Financiero'
+        WHEN ms.e_fase = 5 THEN 'Evaluando Coordinar Inspeccion'
+        WHEN ms.e_fase = 6 THEN 'Inspeccion'
+        WHEN ms.e_fase = 7 THEN 'Evaluando Coordinar Negociacion'
+        WHEN ms.e_fase = 8 THEN 'Negociacion'
+        WHEN ms.e_fase = 9 THEN 'Cobrar Costo de Transaccion'
+        WHEN ms.e_fase = 10 THEN 'Proceso de desembolso'
+        WHEN ms.e_fase = 11 THEN 'Hipotecado'
+    END AS fase,
+    p.numerodocumento AS numero_documento,
+    ms.c_mae_solicitud_id as id
+    FROM mae_solicitud ms
+    LEFT JOIN primer_msp msp_filtered ON ms.c_mae_solicitud_id = msp_filtered.c_mae_solicitud_id AND msp_filtered.rn = 1   
+    LEFT JOIN persona p  ON p.idpersona = msp_filtered.c_persona_id
+    <where>
+        <if test="tipoSolicitud != null">
+            AND ms.c_tipo_solicitud = #{tipoSolicitud}
+        </if>
+        <if test="filterText != null and filterText != ''">
+            AND (
+                CONCAT(p.nombres, ' ', p.apellidopaterno, ' ', p.apellidomaterno) LIKE CONCAT('%', #{filterText}, '%') 
+                OR p.numerodocumento LIKE CONCAT('%', #{filterText}, '%') 
+                OR CAST(ms.c_mae_solicitud_id_pk AS TEXT) LIKE CONCAT('%', #{filterText}, '%')
+            )
+        </if>
+    </where> 
+    ORDER BY ms.c_mae_solicitud_id 
+    LIMIT #{pageSize} OFFSET #{offset};
+    </select> 
+
+</mapper>

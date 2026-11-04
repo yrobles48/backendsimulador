@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8"/>
+  <title>Liquidación de Costos de Transacción</title>
+  <style> 
+      @page {
+      size: A4;
+      margin: 10px 40px; 
+    }
+    .container {
+      font-size: 9.5px; 
+      color: #494545;
+    }
+    .border {
+      border: 1px solid black;
+    }
+
+    .bg-primary {
+      background-color: #263575;
+      color: #fff;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .text-end {
+      text-align: right;
+    }
+    .separator{
+        padding: 0px 0px 0px 5px;
+    }
+    .w-100 {
+      width: 100%;  
+      display: block; /* Cambiado de flex a block */
+    }
+    .w-60{
+      width: 59.8%;
+      border: 0px;  
+      display: inline-block;  /* Asegura que los divs se alineen correctamente */
+      padding: 0;/* Espaciado entre columnas */
+      margin: 0;/* Espaciado entre columnas */
+    }
+    .w-50 {  
+      width: 49.5%;
+      border: 0px;  
+      display: inline-block;  /* Asegura que los divs se alineen correctamente */
+      padding: 0;/* Espaciado entre columnas */
+      margin: 0;/* Espaciado entre columnas */
+    } 
+
+    .w-40 {
+      width: 39.8%;
+      border: 0px;  
+      display: inline-block;  /* Asegura que los divs se alineen correctamente */
+      padding: 0;/* Espaciado entre columnas */
+      margin: 0;/* Espaciado entre columnas */
+    }
+
+    .w-30 {
+      width: 29.8%;
+      border: 0px;  
+      display: inline-block;  /* Asegura que los divs se alineen correctamente */
+      padding: 0;/* Espaciado entre columnas */
+      margin: 0;/* Espaciado entre columnas */
+    }
+
+    .bg-warning {
+      background-color: #f6a01a;
+    }
+
+    .bg-light {
+      background-color: #bfbfbf;
+    }
+    .my-3 {
+      margin-top:7px;
+      margin-bottom: 7px;
+    }
+    .text-red {
+        color: red;
+    }
+    .d-iblock {
+        display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- <div class="">
+      <div class="w-100 text-end">
+        <img src="classpath:/static/images/logo-presta.png" alt="Descripción de la imagen" style="width:150px; height:auto;"/> 
+      </div>
+    </div> -->
+    <div class="" style="padding-top: 20px !important">
+      <div class="w-100 text-center bg-primary" >
+        <span><b>ANEXO 1 - LIQUIDACIÓN DE COSTOS DE TRANSACCIÓN</b></span>
+      </div>
+    </div>
+    <div class="">
+      <div class="separator text-end" th:if="${!liquidacionCostosTransaccion.esDolares}">
+          <span>SOLES</span>
+      </div>
+      <div class="separator text-end" th:if="${liquidacionCostosTransaccion.esDolares}">
+        <span>DOLARES</span>
+      </div>
+    </div> 
+
+    <!-- Datos del Cliente -->
+    <div class="w-100 separator">
+        <div class="w-50">
+          <div class="w-100">
+            <div class="w-50" ><span><b>CLIENTE</b></span></div>
+            <div class="w-50" ><span th:text="${operacion.nombre_corto_cliente}"></span></div>
+          </div>
+          <div class="w-100" >
+            <div class="w-50"><span><b>DOCUMENTO</b></span></div>
+            <div class="w-50"><span th:text="${operacion.tipo_documento} + ' - ' + ${ operacion.numero_documento}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>NRO. DE OPER.</b></span></div>
+            <div class="w-50"><span th:text="${liquidacionCostosTransaccion.numOperacion + ' - ' + (operacion.tipo_operacion_id == 4? 'Nueva R' : operacion.tipo_operacion )}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>NRO. DE OPER. ANTERIOR</b></span></div>
+            <div class="w-50"><span th:text="${operacion.tipo_operacion_id == 1? '' : operacion.codigo_anterior}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>TIPO DE CONTRATO</b></span></div>
+            <div class="w-50"><span th:text="${tipoContratoName}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>NRO. DE FIRMANTES</b></span></div>
+            <div class="w-50"><span th:text="${liquidacionCostosTransaccion.nroFirmantes}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>NRO. DE INTERVINIENTES</b></span></div>
+            <div class="w-50"><span th:text="${liquidacionCostosTransaccion.intervinienteObligado}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>NRO. CHEQUES GERENCIA EXTRA</b></span></div>
+            <div class="w-50"><span th:text="${liquidacionCostosTransaccion.nroChequesGerenciaExtra}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>INVERSIONISTA</b></span></div>
+            <div class="w-50"><span th:text="${fondoName}"></span></div>
+          </div>
+          <!-- <div class="w-100" >
+            <div class="w-50"><span><b></b></span></div>
+             <div class="w-50"><span th:text=""></span></div> 
+          </div> -->
+        </div>
+  
+        <!-- Información Financiera -->
+        <div class="w-50">
+          <div class="w-100">
+            <div class="w-50"><span><b>PRESTAMO NETO</b></span></div>
+            <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.prestamoNeto, 1, 'COMMA', 2, 'POINT')}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>FINANCIAMIENTO TOTAL</b></span></div>
+            <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.financiamientoTotal, 1, 'COMMA', 2, 'POINT')}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>GRAVAMEN</b></span></div>
+            <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.gravamen, 1, 'COMMA', 2, 'POINT')}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>MONTO ADEUDADO</b></span></div>
+            <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.montoAdeudado, 1, 'COMMA', 2, 'POINT')}"></span></div>
+          </div> 
+          <div class="w-100">
+            <div class="w-50"><span><b>ADEUDADO AL</b></span></div>
+            <div class="w-50"><span th:text="${#temporals.format(liquidacionCostosTransaccion.fechaAdeudado, 'dd-MM-yyyy')}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>TIPO DE CAMBIO(PERITAJE)</b></span></div>
+            <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.tipoCambioPeritaje, 1, 'COMMA', 2, 'POINT')}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>TIPO DE VALORIZACIÓN</b></span></div>
+            <div class="w-50"><span th:text="${tipoValorizacionName}"></span></div>
+          </div> 
+          <div class="w-100">
+            <div class="w-50"><span><b>GRAVAMEN A LEVANTAR</b></span></div>
+            <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.gravamenALevantar, 1, 'COMMA', 2, 'POINT')}"></span></div>
+          </div>
+          <div class="w-100">
+            <div class="w-50"><span><b>ASESOR</b></span></div>
+            <div class="w-50"><span th:text="${nombreAsesor}"></span></div>
+          </div> 
+        </div>
+  
+      </div>
+      
+    <hr/>
+    <div class="separator bg-warning">
+      <div class="w-50"><span><b>A. TOTAL COSTOS DE TRANSACCIÓN</b></span></div>
+      <div class="w-50"><span><b th:text="${#numbers.formatDecimal((liquidacionCostosTransaccion.criBloqueoPeritaje + liquidacionCostosTransaccion.pagosDescontadosCheque + liquidacionCostosTransaccion.costosAdicionales) , 1, 'COMMA', 2, 'POINT')}"></b></span></div>
+    </div>
+    <div class="my-3 w-100">
+        <div class="w-100 separator border"> 
+            <div class="w-50">
+                <div class="w-60"><span><b>CRI / BLOQUEO / PERITAJE</b></span></div> 
+                <div class="d-iblock" ><span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.criBloqueoPeritaje, 1, 'COMMA', 2, 'POINT')}"></b></span></div> 
+            </div>
+        </div>
+        <div class="w-60 ">
+            <div class="w-100 separator" >
+                <div class="w-100">
+                    <div class="w-50"><span>CRI y Copia Literal</span></div>
+                    <div class="w-50"><span th:text="${#numbers.formatDecimal( (liquidacionCostosTransaccion.certificadoRegistralInmobiliario), 1, 'COMMA', 2, 'POINT')}"></span></div>
+                  </div>
+                  <div class="w-100">
+                    <div class="w-50"><span>Bloqueo Registral</span></div>
+                    <div class="w-50"><span th:text="${#numbers.formatDecimal( (liquidacionCostosTransaccion.bloqueoRegistral  ), 1, 'COMMA', 2, 'POINT')}"></span></div>
+                  </div>
+                  <div class="w-100">
+                  <div class="w-50"><span>Peritaje</span></div>
+                    <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.peritaje, 1, 'COMMA', 2, 'POINT')}"></span></div>
+                  </div>
+                  <div class="w-100">
+                    <div class="w-50"><span>Costo de Inspección</span></div>
+                    <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.costoInspeccion, 1, 'COMMA', 2, 'POINT')}"></span></div> 
+                  </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="my-3 w-100">
+        <div class="w-100 separator border">
+            <div class="w-50">
+                <div class="w-60"><span><b>PAGOS DESCONTADOS DEL CHEQUE</b></span></div> 
+                <div class="d-iblock"><span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.pagosDescontadosCheque, 1, 'COMMA', 2, 'POINT')}"></b></span></div>
+            </div>
+        </div>
+        <div class="w-60">
+            <div class="w-100 separator">
+                <div class="w-100">
+                    <div class="w-50"><span>Derechos Notariales</span></div>
+                    <div class="w-50"><span th:text="${#numbers.formatDecimal( (liquidacionCostosTransaccion.derechosNotariales ), 1, 'COMMA', 2, 'POINT')}"></span></div>
+                  </div>
+                  <div class="w-100">
+                    <div class="w-50"><span>(1) Derechos Registrales</span></div>
+                    <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.derechosRegistrales, 1, 'COMMA', 2, 'POINT')}"></span></div>
+                  </div>
+                  <div class="w-100">
+                  <div class="w-50"><span>Asesoría Prestaclub</span></div>
+                    <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.asesoriaPrestaclub, 1, 'COMMA', 2, 'POINT')}"></span></div>
+                  </div> 
+                  <div class="w-100" th:if="${operacion.tipo_operacion_id == 3}">
+                    <div class="w-50"><span>Cargo por PJ</span></div>
+                    <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.cargoPj, 1, 'COMMA', 2, 'POINT')}"></span></div>
+                  </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="my-3 w-100">
+        <div class="w-100 separator border">
+            <div class="w-50">
+                <div class="w-60"><span><b>COSTOS ADICIONALES</b></span></div> 
+                <div class="d-iblock"><span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.costosAdicionales, 1, 'COMMA', 2, 'POINT')}"></b></span></div>
+            </div>
+        </div>
+        <div class="w-60">
+            <div class="w-100 separator">
+              <div class="w-100">
+                <div class="w-50"><span>(1) Registrales de levantamiento</span></div>
+                <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.registralesLevantamiento, 1, 'COMMA', 2, 'POINT')}"></span></div>
+              </div>
+              <div class="w-100">
+                <div class="w-50"><span>Toma de firmas con lector biométrico</span></div>
+                <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.tomaFirmasBiometrico, 1, 'COMMA', 2, 'POINT')}"></span></div>
+              </div>
+              <div class="w-100">
+              <div class="w-50"><span>Otorgamiento de poder</span></div>
+                <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.otorgamientoPoder, 1, 'COMMA', 2, 'POINT')}"></span></div>
+              </div>
+              <div class="w-100">
+                <div class="w-50"><span>Cheque de gerencia extra</span></div>
+                <div class="w-50"><span th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.chequeGerenciaExtra, 1, 'COMMA', 2, 'POINT')}"></span></div> 
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class=" my-3 separator  bg-warning">
+        <div class="w-50"><span><b>B. PAGADOS POR EL CLIENTE</b></span></div>
+        <div class="w-50"><span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.pagadoCliente, 1, 'COMMA', 2, 'POINT')}"></b></span></div>
+    </div>
+    <div class=" my-3 separator bg-warning">
+        <div class="w-50"><span><b>C. FINANCIADOS POR EL INVERSIONISTA</b></span></div>
+        <div class="w-50"><span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.totalCostosTransaccion, 1, 'COMMA', 2, 'POINT')}"></b></span></div>
+    </div>
+    <div class=" my-3 separator bg-light">
+        <div class="w-100">
+            <span>El cliente, con su firma puesta en este documento, manifiesta expresamente su conformidad y pleno conocimiento de los conceptos, importes y tipo de cambio que representan, implican, y, se han usado para el cálculo de los costos de transacción aquí detallados. Asimismo, en caso de existir algún excedente por concepto de derechos registrales calculados en base al cobro final consignados en los asientos registrales, el cliente podrá solicitar la devolución de los mismos.</span>
+        </div>
+    </div>
+    <div class="my-3 separator"> 
+        <div class="w-100">
+            <span>A la firma de la escritura pública el inversionista traerá el monto a financiar de la siguiente forma:</span>
+        </div>
+    </div>
+    <div class="my-3">
+        <div class="w-100 border">
+            <div class="separator" >
+                <div class="w-100 " >
+                    <div class="w-40">
+                        <span>Traerá un cheque a nombre de PrestaClub SAC por un monto de:</span>
+                    </div>
+                    <div class="w-60">
+                        <span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.totalCostosTransaccion, 1, 'COMMA', 2, 'POINT')}"></b></span>
+                    </div>
+                </div>
+                <div class="w-100" >
+                    <span>Con este monto se pagarán los costos de transacción.</span>
+                </div>
+                <br/>
+                <div class="w-100" >
+                    <div class="w-40">
+                        <span>(*) Un cheque de gerencia por :</span>
+                    </div>
+                    <div class="w-60">
+                        <span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.prestamoNeto, 1, 'COMMA', 2, 'POINT')}"></b></span>
+                    </div>
+                </div> 
+                <div class="w-100" >
+                    <span>A favor de :</span>
+                </div>
+                <div class="w-100" >
+                    <div class="w-40">
+                        <span>NOMBRES :</span>
+                    </div>
+                    <div class="w-60">
+                        <span><b th:text="${liquidacionCostosTransaccion.esTercero} ? ${liquidacionCostosTransaccion.nombreSolicitanteCheque} :  ${operacion.nombre_cliente}"></b></span>
+                    </div>
+                </div>
+                <div class="w-100" >
+                    <div class="w-40">
+                        <span>DNI/RUC :</span>
+                    </div>
+                    <div class="w-60">
+                      <span><b th:text="${liquidacionCostosTransaccion.esTercero} ? ${liquidacionCostosTransaccion.numeroDocumentoSolicitanteCheque} :  ${operacion.numero_documento}"></b></span> 
+                    </div>
+                </div>
+                <br/>
+                <div  th:if="${liquidacionCostosTransaccion.esTercero}" >
+                  <div class="w-100"  >
+                    <div class="w-40">
+                        <span>(*) Otro cheque de gerencia por :</span>
+                    </div>
+                    <div class="w-60">
+                      <span><b th:text="${#numbers.formatDecimal( 0 , 1, 'COMMA', 2, 'POINT')}"></b></span>
+                  </div>
+                  </div>
+                  <div class="w-100"  >
+                    <span>A favor de :</span>
+                  </div>
+                  <div class="w-100" >
+                    <div class="w-40">
+                        <span>NOMBRES :</span>
+                    </div>
+                    <div class="w-60">
+                      <span><b th:text="${operacion.nombre_cliente}"></b></span>
+                    </div>
+                  </div>
+                  <div class="w-100">
+                    <div class="w-40">
+                        <span>DNI/RUC :</span>
+                    </div>
+                    <div class="w-60">
+                      <span><b th:text="${operacion.numero_documento}"></b></span>
+                  </div>
+                  </div>
+                </div>
+                <br/>
+                <div  th:if="${liquidacionCostosTransaccion.inversionistaId != 0}" >
+                  <div class="w-100"  >
+                    <div class="w-40">
+                        <span>(*) Otro cheque de gerencia por :</span>
+                    </div>
+                    <div class="w-60">
+                        <span><b th:if="${operacion.tipo_operacion_id == 1 || operacion.tipo_operacion_id == 4 }"  >-</b></span>
+                        <span><b th:if="${!(operacion.tipo_operacion_id == 1 || operacion.tipo_operacion_id == 4 )}" th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.montoAdeudado, 1, 'COMMA', 2, 'POINT')}"></b></span>
+                    </div>
+                  </div>
+                  <div class="w-100"  >
+                    <span>A favor de :</span>
+                  </div>
+                  <div class="w-100" >
+                    <div class="w-40">
+                        <span>NOMBRES :</span>
+                    </div>
+                    <div class="w-60">
+                        <span><b th:if="${!(operacion.tipo_operacion_id == 1 || operacion.tipo_operacion_id == 4 )}" th:text="${inversionistaName}"></b></span>
+                    </div>
+                  </div>
+                  <div class="w-100">
+                    <div class="w-40">
+                        <span>DNI/RUC :</span>
+                    </div>
+                    <div class="w-60">
+                        <span><b th:if="${!(operacion.tipo_operacion_id == 1 || operacion.tipo_operacion_id == 4 )}" th:text="${inversionistaRuc}"></b></span>
+                    </div>
+                  </div>
+                </div>
+                
+            </div>
+        </div>
+        <br/>
+        <div class="W-100 separator"> 
+          <div class="text-red">
+              <span>
+                (1) Monto referencial sujeto a cambios por SUNARP
+              </span>
+          </div>
+        </div>
+        <div class="w-100 separator" >
+            <span class="text-red" >(*)El costo de lo cheques de gerencia es asumido por el inversionista.</span>
+        </div> 
+        <br/>
+        <div class="w-100 separator">
+            <div class="w-50 " >
+                <div class="w-100" >
+                    <span><b>RESUMEN DE LOS DESEMBOLSOS</b></span>
+                </div>
+                <div class="w-100" >
+                    <div class="w-50" >
+                        <span>Costos de Transaccion</span>
+                    </div>
+                    <div class="w-50 text-end" >
+                        <span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.totalCostosTransaccion, 1, 'COMMA', 2, 'POINT')}"></b></span>
+                    </div>
+                </div>
+                <div class="w-100" >
+                    <div class="w-60">
+                        <span th:text="${liquidacionCostosTransaccion.esTercero} ? ${liquidacionCostosTransaccion.nombreSolicitanteCheque} :  ${operacion.nombre_cliente}" ></span>
+                    </div>
+                    <div class="text-end"  style="width: 39.3% !important;display: inline-block;" >
+                        <span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.prestamoNeto, 1, 'COMMA', 2, 'POINT')}"></b></span>
+                    </div>
+                </div>
+                <div class="w-100"  >
+                  <div class="w-60">
+                      <span th:if="${!(operacion.tipo_operacion_id == 1 || operacion.tipo_operacion_id == 4 )}" th:text="${inversionistaName}" ></span>
+                  </div>
+                  <div class="text-end"  style="width: 39.3% !important;display: inline-block;" >
+                      <span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.montoAdeudado, 1, 'COMMA', 2, 'POINT')}"></b></span>
+                  </div>
+                </div>
+                <hr/>
+                <div class="w-100" >
+                    <div class="w-50"  >
+                        <span>FINANCIAMIENTO TOTAL:</span>
+                    </div>
+                    <div class="w-50 text-end">
+                        <span><b th:text="${#numbers.formatDecimal(liquidacionCostosTransaccion.financiamientoTotal, 1, 'COMMA', 2, 'POINT')}"></b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  </div>
+</body>
+
+</html>

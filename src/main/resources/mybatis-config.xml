@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias alias="OperacionDTO" type="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.OperacionDTO"/>
+        <typeAlias alias="UsuarioDTO" type="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.UsuarioDTO"/>
+        <typeAlias alias="DashboardTipoSolicitudDTO" type="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.DashboardTipoSolicitudDTO"/>
+        <typeAlias alias="DashboardListaTipoSolicitudDTO" type="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.DashboardListaTipoSolicitudDTO"/>
+        <typeAlias alias="TipoSolicitudDTO" type="com.prestaclub.prestaclub_backend.persistence.antiguo.dto.TipoSolicitudDTO"/>
+    </typeAliases> 
+    <mappers>
+        <mapper resource="mybatis/OperacionMapper.xml"/> 
+        <mapper resource="mybatis/HomeDashboardAntiguoMapper.xml"/> 
+        <mapper resource="mybatis/CommonsAntiguoMapper.xml"/> 
+    </mappers> 
+</configuration>
